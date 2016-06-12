@@ -2,22 +2,114 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/studentName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="John Smith"
-            android:id="@+id/studentName"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="John Smith"
+                android:id="@+id/studentName"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:textSize="56dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.13"
+                >
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="ID"
+                        android:id="@+id/id"
+                        android:layout_column="1" android:paddingRight="27dp"
+                        android:paddingLeft="27dp"/>
+
+                    <TextView
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="456"
+                        android:id="@+id/studentId"
+                        android:layout_column="13" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+
+                    <TextView
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Mark"
+                        android:id="@+id/textView"
+                        android:layout_column="1"
+                        android:paddingRight="27dp"
+                        android:paddingLeft="27dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Large Text"
+                        android:id="@+id/mark"
+                        android:layout_column="13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </TableRow>
+
+            </TableLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Update"
+                    android:id="@+id/update"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#3d41ff"
+                    android:clickable="true"
+                    android:textColor="#ffffff"
+                    android:padding="10dp"
+                    android:layout_marginRight="39dp"
+                    android:layout_marginEnd="39dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/delete"
+                    android:layout_toStartOf="@+id/delete" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete"
+                    android:id="@+id/delete"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#ef4646"
+                    android:textColor="#ffffff"
+                    android:padding="10dp"
+                    android:layout_marginRight="89dp"
+                    android:layout_marginEnd="89dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
 
 </RelativeLayout>

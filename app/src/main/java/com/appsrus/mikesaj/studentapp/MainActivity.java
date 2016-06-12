@@ -16,6 +16,9 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.appsrus.mikesaj.studentapp.DAL.DBHelper;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ListView studentListView = null;
     ImageButton addButton;
     List<StudentsInfo> studentinfoList;
+    DBHelper dbconnect;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -36,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public MainActivity() {
         // Instantiating Student information list object
         studentinfoList = new ArrayList<StudentsInfo>();
+
+        // Initialize database helper class object
+        dbconnect = new DBHelper(this);
+
     }
 
     @Override
@@ -52,7 +61,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, Popup.class));
+
+                Intent AddStudentActivity = new Intent(MainActivity.this, Popup.class);
+
+                //Posting data to another Activity
+                AddStudentActivity.putExtra("id", 0);
+
+                // Start Activity
+                startActivity(AddStudentActivity);
             }
 
         });
@@ -63,36 +79,35 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         // Student info
-        StudentsInfo StudentInfo = new StudentsInfo();
+        StudentsInfo Student = new StudentsInfo();
         // Initialize the table with student
-        StudentInfo.Id = "76543";
-        StudentInfo.Name = "Mike123";
+        Student.Id = 76543;
+        Student.Name = "Mike123";
+        Student.Mark = "100%";
 
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
-        studentinfoList.add(StudentInfo);
+        studentinfoList.add(Student);
+
+        StudentsInfo Student1 = new StudentsInfo();
+
+        Student1.Id = 222;
+        Student1.Name = "Ebahi";
+        Student1.Mark = "75%";
+
+        studentinfoList.add(Student1);
+
+
+        //////////// FROM Database
+
 
 
         // Convert the list to adapterlist for the table
-        for (StudentsInfo student : studentinfoList) {
+        for (StudentsInfo studentdata : studentinfoList) {
+
+
+            System.out.println(studentdata.Name);
 
             // Add student to Students list
-            studentList.add(student.Name);
+            studentList.add(studentdata.Name);
         }
 
         // Initialize adapter
@@ -104,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Add click listener to each record on the student Listview
         studentListView.setOnItemClickListener(this);
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -113,9 +129,40 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
         //
 
-        Toast.makeText(getApplicationContext(),
-                "Student Position: " + pos, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),
+        //        "Student Position: " + pos, Toast.LENGTH_LONG).show();
 
+        StudentsInfo studentData = getStudentData(pos);
+
+        String selectedStudentData = studentData.Name+" "+ studentData.Mark;
+
+                Toast.makeText(getApplicationContext(),
+                "Student Position: " + selectedStudentData, Toast.LENGTH_LONG).show();
+
+
+
+
+        //Starting the ViewStudentActivity Screen and posting  student ID, Name & Mark
+        Intent viewStudentActivity = new Intent(getApplicationContext(), Viewstudent.class);
+
+        //Posting data to another Activity
+        viewStudentActivity.putExtra("id",   studentData.Id);
+        viewStudentActivity.putExtra("name", studentData.Name);
+        viewStudentActivity.putExtra("mark", studentData.Mark);
+
+        //startActivity(new Intent(getApplicationContext(), Popup.class));
+        startActivity(viewStudentActivity);
+
+    }
+
+    /*
+     * @return Student data from List with a position condition
+     */
+    private StudentsInfo getStudentData(int position){
+
+        //Get StudentsInfo data from StudentList at a particular position
+        StudentsInfo studentData = studentinfoList.get(position);
+        return studentData;
     }
 
     @Override
@@ -159,7 +206,3 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 }
 
-class StudentsInfo{
-    String Id;
-    String Name;
-}

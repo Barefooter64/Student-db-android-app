@@ -13,10 +13,14 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.appsrus.mikesaj.studentapp.StudentsInfo;
+
+
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "school.db";
     public static final String STUDENT_TABLE = "students";
+
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_FIRST_NAME = "first_name";
     public static final String COLUMN_lAST_NAME = "last_name";
@@ -83,24 +87,37 @@ public class DBHelper extends SQLiteOpenHelper {
     public Integer deleteStudent (Integer id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("contacts",
-                "id = ? ",
+        return db.delete(STUDENT_TABLE,
+                COLUMN_ID + " = ? ",
                 new String[] { Integer.toString(id) });
     }
 
-    public ArrayList<String> getAllCotacts()
+    public ArrayList<String> getAllStudent()
     {
         ArrayList<String> array_list = new ArrayList<String>();
+        StudentsInfo Student = new StudentsInfo();
+
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from "+STUDENT_TABLE, null );
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
+        while(res.isAfterLast() == false){ //res.getColumnName()
+
+            Student.Id = res.getColumnIndex(COLUMN_ID);
+
+            Student.Name = res.getString(res.getColumnIndex(COLUMN_FIRST_NAME));//COLUMN_lAST_NAME
+            Student.Mark = res.getString(res.getColumnIndex(COLUMN_MARK));
+
+
             array_list.add(res.getString(res.getColumnIndex(COLUMN_ID)));
             res.moveToNext();
         }
+        // freeing the cursor
+        res.close();
         return array_list;
     }
+
+
 }
