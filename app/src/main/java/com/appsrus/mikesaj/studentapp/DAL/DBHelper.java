@@ -88,7 +88,11 @@ public class DBHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(STUDENT_TABLE,
+<<<<<<< HEAD
                 COLUMN_ID + " = ? ",
+=======
+                COLUMN_ID+" = ? ",
+>>>>>>> c62978833e9a7335100032507a236be7f17bde7a
                 new String[] { Integer.toString(id) });
     }
 
@@ -118,6 +122,10 @@ public class DBHelper extends SQLiteOpenHelper {
         res.close();
         return array_list;
     }
+<<<<<<< HEAD
 
 
 }
+=======
+}
+>>>>>>> c62978833e9a7335100032507a236be7f17bde7a
