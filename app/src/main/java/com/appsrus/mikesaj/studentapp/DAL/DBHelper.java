@@ -87,19 +87,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public Integer deleteStudent (Integer id)
     {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(STUDENT_TABLE,
-<<<<<<< HEAD
-                COLUMN_ID + " = ? ",
-=======
-                COLUMN_ID+" = ? ",
->>>>>>> c62978833e9a7335100032507a236be7f17bde7a
-                new String[] { Integer.toString(id) });
+        return db.delete(STUDENT_TABLE, COLUMN_ID + " = ? ", new String[] { Integer.toString(id) });
     }
 
-    public ArrayList<String> getAllStudent()
+    public ArrayList<StudentsInfo> getAllStudent()
     {
-        ArrayList<String> array_list = new ArrayList<String>();
-        StudentsInfo Student = new StudentsInfo();
+        //ArrayList<String> array_list = new ArrayList<String>();
+        ArrayList<StudentsInfo> array_list = new ArrayList<StudentsInfo>();
+        //StudentsInfo Student = new StudentsInfo();
 
 
         //hp = new HashMap();
@@ -109,23 +104,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
         while(res.isAfterLast() == false){ //res.getColumnName()
 
-            Student.Id = res.getColumnIndex(COLUMN_ID);
+            StudentsInfo Student = new StudentsInfo();
 
-            Student.Name = res.getString(res.getColumnIndex(COLUMN_FIRST_NAME));//COLUMN_lAST_NAME
+            Student.Id = res.getString(res.getColumnIndex(COLUMN_ID));
+            Student.firstName = res.getString(res.getColumnIndex(COLUMN_FIRST_NAME));//COLUMN_FIRST_NAME
+            Student.lastName = res.getString(res.getColumnIndex(COLUMN_lAST_NAME));//COLUMN_lAST_NAME
             Student.Mark = res.getString(res.getColumnIndex(COLUMN_MARK));
 
 
-            array_list.add(res.getString(res.getColumnIndex(COLUMN_ID)));
+            array_list.add(Student);
             res.moveToNext();
         }
         // freeing the cursor
         res.close();
         return array_list;
     }
-<<<<<<< HEAD
-
 
 }
-=======
-}
->>>>>>> c62978833e9a7335100032507a236be7f17bde7a

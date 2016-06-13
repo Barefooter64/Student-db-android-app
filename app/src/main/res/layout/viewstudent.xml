@@ -15,13 +15,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="John Smith"
-                android:id="@+id/studentName"
+                android:text="Smith"
+                android:id="@+id/lastName"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
                 android:textSize="56dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="John"
+                android:id="@+id/firstName"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="1dp"
+                android:textSize="36dp" />
 
             <TableLayout
                 android:layout_width="match_parent"

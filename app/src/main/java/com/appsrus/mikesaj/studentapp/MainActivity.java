@@ -18,17 +18,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.appsrus.mikesaj.studentapp.DAL.DBHelper;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
-    // Declare our listview
+    // Declaring the ListView, ImageButton, List collection and Database_Helper objects for this activity
     ListView studentListView = null;
     ImageButton addButton;
     List<StudentsInfo> studentinfoList;
+    List<String> studentList;
     DBHelper dbconnect;
+    String studentName;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -52,12 +53,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // recuperation de notre composant graphique
+        // Initialising our student listView
         studentListView = (ListView) findViewById(R.id.listView1);
 
         // Cast and instantiate add student button
         addButton = (ImageButton) findViewById(R.id.add_button);
 
+        // Setting an onClickListener to Add_Student data
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
@@ -68,91 +70,50 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 AddStudentActivity.putExtra("id", 0);
 
                 // Start Activity
-                startActivity(AddStudentActivity);
+                startActivityForResult(AddStudentActivity, 100);
             }
 
         });
 
-        // Building the list of students that we will display in our
-        // ListView
-        List<String> studentList = new ArrayList<String>();
-
-
-        // Student info
-        StudentsInfo Student = new StudentsInfo();
-        // Initialize the table with student
-        Student.Id = 76543;
-        Student.Name = "Mike123";
-        Student.Mark = "100%";
-
-        studentinfoList.add(Student);
-
-        StudentsInfo Student1 = new StudentsInfo();
-
-        Student1.Id = 222;
-        Student1.Name = "Ebahi";
-        Student1.Mark = "75%";
-
-        studentinfoList.add(Student1);
-
-
-        //////////// FROM Database
-
-
-
-        // Convert the list to adapterlist for the table
-        for (StudentsInfo studentdata : studentinfoList) {
-
-
-            System.out.println(studentdata.Name);
-
-            // Add student to Students list
-            studentList.add(studentdata.Name);
-        }
-
-        // Initialize adapter
-        ListAdapter adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, studentList);
-
-        // set adapter to our listview
-        studentListView.setAdapter(adapter);
-
-        // Add click listener to each record on the student Listview
-        studentListView.setOnItemClickListener(this);
+        // This method call populates the listView from the database
+        this.populate_listView();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    // Function to read the result from newly created activity
+    @Override
+    protected void onActivityResult(int requestCode,
+                                    int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        this.populate_listView();
+    }
+
     @Override
     public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
-        //
 
-        //Toast.makeText(getApplicationContext(),
-        //        "Student Position: " + pos, Toast.LENGTH_LONG).show();
-
+        // Locate selected Student with position-number
         StudentsInfo studentData = getStudentData(pos);
 
-        String selectedStudentData = studentData.Name+" "+ studentData.Mark;
+        String selectedStudentData = studentData.firstName+" "+ studentData.lastName;
 
-                Toast.makeText(getApplicationContext(),
-                "Student Position: " + selectedStudentData, Toast.LENGTH_LONG).show();
-
-
-
+        // Display toast message of selected student
+        Toast.makeText(getApplicationContext(), "Student: " + selectedStudentData, Toast.LENGTH_LONG).show();
 
         //Starting the ViewStudentActivity Screen and posting  student ID, Name & Mark
         Intent viewStudentActivity = new Intent(getApplicationContext(), Viewstudent.class);
 
         //Posting data to another Activity
         viewStudentActivity.putExtra("id",   studentData.Id);
-        viewStudentActivity.putExtra("name", studentData.Name);
+        viewStudentActivity.putExtra("firstName", studentData.firstName);
+        viewStudentActivity.putExtra("lastName", studentData.lastName);
         viewStudentActivity.putExtra("mark", studentData.Mark);
 
-        //startActivity(new Intent(getApplicationContext(), Popup.class));
-        startActivity(viewStudentActivity);
-
+        // start the ViewStudent activity
+        startActivityForResult(viewStudentActivity, 100);
     }
 
     /*
@@ -161,8 +122,51 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private StudentsInfo getStudentData(int position){
 
         //Get StudentsInfo data from StudentList at a particular position
-        StudentsInfo studentData = studentinfoList.get(position);
-        return studentData;
+        return studentinfoList.get(position);
+    }
+
+    private void populate_listView(){
+
+
+        // Building the list of students that we will display in our
+        // ListView
+        studentList = new ArrayList<String>();
+
+        // Initialize the table with student info
+        studentinfoList = dbconnect.getAllStudent();
+
+        // Convert the list to adapterlist for the listView
+        for (StudentsInfo studentdata : studentinfoList) {
+
+            // concatenate firstName and lastName
+            studentName = studentdata.firstName + " " + studentdata.lastName;
+
+            // Add student to Students list
+            studentList.add(studentName);
+        }
+
+        // If database is empty of student records
+        if(studentinfoList.isEmpty()){
+
+            // Add Error message of an empty list
+            studentList.add(" Error!\nNo Student Data Found");
+            studentListView.setOnItemClickListener(null);
+        }
+
+
+        // Instatiating an listadapter object
+        ListAdapter adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1, studentList);
+
+        // Populate student data to our listview
+        studentListView.setAdapter(adapter);
+
+        // Check if studentData list is empty
+        if(!studentinfoList.isEmpty()){
+
+            // Add click listener to each record on the student Listview
+            studentListView.setOnItemClickListener(this);
+        }
     }
 
     @Override
